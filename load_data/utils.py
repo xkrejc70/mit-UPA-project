@@ -22,3 +22,12 @@ def write_stringio(output : io.StringIO, filename):
     with open(os.path.join(data_dir(), f"{filename}.csv"), 'w') as f:
         output.seek(0)
         shutil.copyfileobj(output, f)
+
+#EXAMPLE of a function that makes selected column look better
+def all_before_bracket(text):
+    if text is None or text.strip() == "":
+        return text
+    text = text.split('(')[0].replace("až", "-").replace(" ", "").replace("Od95", "95+")
+    if text.startswith("5-"):
+        text = "0"+text
+    return text

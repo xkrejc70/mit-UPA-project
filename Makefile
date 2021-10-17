@@ -1,5 +1,5 @@
-all: load
+all:
 	@echo haha;
 
 load:
-	cd load_data; python3 load_data.py;
+	@cd load_data; python3 load_data.py;
