@@ -11,11 +11,12 @@ def data_dir():
 
 def delete_dir_content(dir_path):
     for filename in os.listdir(dir_path):
-        file_path = os.path.join(dir_path, filename)
-        try:
-            os.unlink(file_path)
-        except:
-            pass
+        if filename != ".gitkeep":
+            file_path = os.path.join(dir_path, filename)
+            try:
+                os.unlink(file_path)
+            except:
+                pass
 
 def write_stringio(output : io.StringIO, filename):
     with open(os.path.join(data_dir(), f"{filename}.csv"), 'w') as f:
