@@ -19,7 +19,7 @@ Alternativa:
 ## Dotazy skupiny B
 
 * Vytvořte sérii sloupcových grafů (alespoň 3), které porovnají vývoj různých covidových ukozatelů vámi zvoleného kraj se zbytkem republiky. Jako covidové ukazatele můžete použít: počet nakažených osob, počet hospitalizovaných osob, počet zemřelých, počet očkovaných. Všechny hodnoty uvažujte přepočtené na jednoho obyvatele kraje/republiky. Zobrazte alespoň 12 po sobě jdoucích hodnot (např. hodnoty za poslední rok po měsících).
-  * 1. Nakažení: https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/osoby.csv
+  * 1. Nakažení: viz A
   * 2. Úmrtí: https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/umrti.csv
   * 3. Očkovaní viz A
 
