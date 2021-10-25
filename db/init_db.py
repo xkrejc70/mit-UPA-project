@@ -1,71 +1,30 @@
 import mongodb
+import csv
 
 # Establish a connection
 mongo_client = mongodb.connect()
 
 #print(mongo_client.server_info())
-print(mongo_client.list_database_names())
+print(f"DBs: ", mongo_client.list_database_names())
 
 db = mongodb.create_db(mongo_client)
 
 
+# Create collections
+coll_new_cases = mongodb.create_collection(db, "new_cases")
+coll_vaccinated = mongodb.create_collection(db, "vaccinated")
+coll_deaths = mongodb.create_collection(db, "deaths")
+coll_cz_regions = mongodb.create_collection(db, "cz_regions")
+coll_city = mongodb.create_collection(db, "city")
 
-############x TEST DB
+# Insert to collections
+#mongodb.insert_into_collection(coll_new_cases, "data/new_cases")
+mongodb.insert_into_collection(coll_new_cases, "data_test/new_cases_for_test_only")
+mongodb.insert_into_collection(coll_cz_regions, "data_static/cz_regions")
 
-db_test = mongodb.create_collection(db, "test")
-
-result = db_test.insert_one({
-        "datum": "2021-01-20",
-        "vek": 84,
-        "pohlavi": "Z",
-        "kraj_nuts_kod": "CZ042",
-        "okres_lau_kod": "CZ0425"
-    })
-print(result)
-
-test_data = [
-    {
-        "datum": "2021-01-20",
-        "vek": 84,
-        "pohlavi": "Z",
-        "kraj_nuts_kod": "CZ042",
-        "okres_lau_kod": "CZ0425"
-    },
-    {
-        "datum": "2020-12-12",
-        "vek": 65,
-        "pohlavi": "Z",
-        "kraj_nuts_kod": "CZ080",
-        "okres_lau_kod": "CZ0806"
-    },
-    {
-        "datum": "2020-10-27",
-        "vek": 38,
-        "pohlavi": "Z",
-        "kraj_nuts_kod": "CZ064",
-        "okres_lau_kod": "CZ0642"
-    },
-    {
-        "datum": "2021-01-09",
-        "vek": 27,
-        "pohlavi": "M",
-        "kraj_nuts_kod": "CZ020",
-        "okres_lau_kod": "CZ020C"
-    }
-]
-
-result = db_test.insert_many(test_data)
-print(result)
-
-for x in db_test.find():
-    print(x)
-
-#collist = db.list_collection_names()
-#if "test" in collist:
-#    print("upa_covid_db in collist")
-
-
+mongodb.print_all(coll_new_cases)
+mongodb.print_all(coll_cz_regions)
 
 # Delete db and disconnect
-print(mongo_client.list_database_names())
+print(f"DBs: ", mongo_client.list_database_names())
 mongodb.disconnect(mongo_client)

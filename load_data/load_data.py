@@ -23,6 +23,30 @@ sources.append(source_model(
     ],
     filename = "statistika"
 ))
+sources.append(source_model(
+    link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/osoby.csv",
+    columns = [
+        column_model(0),
+        column_model(1),
+        column_model(2),
+        column_model(3)
+    ],
+    filename = "new_cases"
+))
+# TODO size: 2GB
+"""
+sources.append(source_model(
+    link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/ockovani-profese.csv",
+    columns = [
+        column_model(0),
+        column_model(2),
+        column_model(14),
+        column_model(15),
+        column_model(18)
+    ],
+    filename = "vaccinated"
+))
+"""
 
 #DO NOT DELETE --- TEMPLATE
 """
