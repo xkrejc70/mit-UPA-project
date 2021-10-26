@@ -9,6 +9,9 @@ def project_dir():
 def data_dir():
     return os.path.join(project_dir(), "data")
 
+def static_data_dir():
+    return os.path.join(project_dir(), "data_static")
+
 def delete_dir_content(dir_path):
     for filename in os.listdir(dir_path):
         if filename != ".gitkeep":

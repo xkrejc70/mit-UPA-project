@@ -1,6 +1,5 @@
 from pymongo import MongoClient
-import os
-import csv
+import os, csv
 
 db_name = "upa_covid_db"
 
@@ -17,11 +16,11 @@ def create_collection(db, collection):
     return db[collection]
 
 def insert_into_collection(collection, csv_file):
-    with open('../'+ csv_file +'.csv', 'r') as csvfile:
+    with open(csv_file + '.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         header = next(reader)
 
-        print(f"Inserting", csv_file)
+        print(f"Inserting from", csv_file)
         for row in reader:
             doc = {}
             for n in range(0,len(header)):

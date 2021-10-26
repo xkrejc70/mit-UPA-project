@@ -30,6 +30,29 @@ class csv_handler:
             utils.write_stringio(output, filename)
         return output
 
+    def filter_cities(self, desired_columns : List[column_model], filename=None):
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow([self.header[dc.index] for dc in desired_columns])
+
+        # Filter 50 cities from 2020
+        with open(utils.static_data_dir() + '/top_50_cities.csv', 'r') as csvfile:
+            csv_top_50_cities = csv.reader(csvfile)
+
+            top_50_cities = []
+            for city in csv_top_50_cities:
+                top_50_cities.append(city[0])
+
+        for row in self.rows:
+            if "2020" not in row[9] or row[12] not in top_50_cities:
+                continue 
+            new_row = []
+            for dc in desired_columns:
+                new_row.append(dc.func(row[dc.index]))
+            writer.writerow(new_row)
+        utils.write_stringio(output, filename)
+        return output
+
     def group_column(self, index, data : io.StringIO = None):
         if data is None:
             rows = self.rows
