@@ -2,7 +2,6 @@ import utils
 from csv_handler import csv_handler
 from input_models import column_model, source_model
 
-utils.delete_dir_content(utils.data_dir())
 
 sources = []
 sources.append(source_model(
@@ -38,7 +37,7 @@ sources.append(source_model(
     filename = "new_cases"
 ))
 # TODO size: 2GB
-"""
+#"""
 sources.append(source_model(
     link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/ockovani-profese.csv",
     columns = [
@@ -50,7 +49,7 @@ sources.append(source_model(
     ],
     filename = "vaccinated"
 ))
-"""
+
 
 #DO NOT DELETE --- TEMPLATE
 """
@@ -65,12 +64,13 @@ sources.append(source_model(
 ))
 """
 
+#delete all outdated data
+utils.delete_dir_content(utils.data_dir())
+
+#download new fresh data
 for source in sources:
     csv_h = csv_handler(source.link, source.filename)
-    csv_h.print_sample()
     if source.filename == "cities":
-        data = csv_h.filter_cities(source.columns, filename = source.filename)
+        data = csv_h.filter_cities(source.columns)
     else:
-        data = csv_h.filter_columns(source.columns, filename = source.filename)
-    if source.filename == "statistika":
-        csv_h.group_column(1,data)
+        data = csv_h.filter_columns(source.columns)

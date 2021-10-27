@@ -7,71 +7,61 @@ class csv_handler:
         self.link = link
         self.encoding = encoding
         self.name = name
-        self.load()
-        self.header = next(self.reader)
-        self.rows = [row for row in self.reader if row != []]
+        self.path = os.path.join(utils.data_dir(), f"{self.name}.csv")
+        self.path_tmp = os.path.join(utils.data_dir(), f"{self.name}_tmp.csv")
+        self.download()
 
-    def load(self):
-        request = requests.get(self.link)
-        request.encoding = 'utf-8-sig'
-        data = request.text.split('\n')
-        self.reader = csv.reader(data)
+    def download(self):
+        response = requests.get(self.link, stream=True)
+        response.encoding = 'utf-8-sig'
+        response.raise_for_status()
+        with open(self.path, 'wb') as handle:
+            for block in response.iter_content(1024):
+                handle.write(block)
 
-    def filter_columns(self, desired_columns : List[column_model], filename=None):
+    def filter_columns(self, desired_columns : List[column_model]):
+        with open(self.path, "r") as data_file:
+            with open(self.path_tmp, "w") as tmp_file:
+                reader = csv.reader(data_file)
+                writer = csv.writer(tmp_file)
+                writer.writerow([next(reader)[dc.index] for dc in desired_columns])
+                for row in reader:
+                    if row == []:
+                        continue
+                    new_row = []
+                    for dc in desired_columns:
+                        new_row.append(dc.func(row[dc.index]))
+                    writer.writerow(new_row)
+        self.tmp2origin()
+
+    def filter_cities(self, desired_columns : List[column_model]):
         output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerow([self.header[dc.index] for dc in desired_columns])
-        for row in self.rows:
-            new_row = []
-            for dc in desired_columns:
-                new_row.append(dc.func(row[dc.index]))
-            writer.writerow(new_row)
-        if filename is not None:
-            utils.write_stringio(output, filename)
-        return output
-
-    def filter_cities(self, desired_columns : List[column_model], filename=None):
-        output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerow([self.header[dc.index] for dc in desired_columns])
 
         # Filter 50 cities from 2020
-        with open(utils.static_data_dir() + '/top_50_cities.csv', 'r') as csvfile:
+        top_50_cities = []
+        with open(os.path.join(utils.static_data_dir(), 'top_50_cities.csv'), 'r') as csvfile:
             csv_top_50_cities = csv.reader(csvfile)
-
-            top_50_cities = []
             for city in csv_top_50_cities:
                 top_50_cities.append(city[0])
 
-        for row in self.rows:
-            if "2020" not in row[9] or row[12] not in top_50_cities:
-                continue 
-            new_row = []
-            for dc in desired_columns:
-                new_row.append(dc.func(row[dc.index]))
-            writer.writerow(new_row)
-        utils.write_stringio(output, filename)
-        return output
+        with open(self.path, "r") as data_file:
+            with open(self.path_tmp, "w") as tmp_file:
+                reader = csv.reader(data_file)
+                writer = csv.writer(tmp_file)
+                writer.writerow([next(reader)[dc.index] for dc in desired_columns])
+                for row in reader:
+                    if row == []:
+                        continue
+                    if "2020" not in row[9] or row[12] not in top_50_cities:
+                        continue 
+                    new_row = []
+                    for dc in desired_columns:
+                        new_row.append(dc.func(row[dc.index]))
+                    writer.writerow(new_row)
+        self.tmp2origin()
 
-    def group_column(self, index, data : io.StringIO = None):
-        if data is None:
-            rows = self.rows
-            header = self.header
-        else:
-            reader = csv.reader(data.getvalue().split('\n'))
-            header = next(reader)
-        print()
-        print(f'Group by of column: "{header[index]}"')
-        rows = [row for row in reader if row != []]
-        group_count_dict = {}
-        for row in rows:
-            group_count_dict[f"{row[index]}"] = group_count_dict.get(f"{row[index]}", 0) + 1 
-        for group_count in sorted(group_count_dict.items()):
-            print(f'Text: "{group_count[0]}", Count: "{group_count[1]}"')
-
-    def print_sample(self):
-        print(f'\n{self.name}')
-        print(f'Header: {self.header}')
-        print(f'First row: {self.rows[0]}')
-        print(f'Last row: {self.rows[-1]}')
-        print(f'Row count: {len(self.rows)}')
+    def tmp2origin(self):
+        a = self.path + "a"
+        os.rename(self.path, a)
+        os.rename(self.path_tmp, self.path)
+        os.remove(a)
