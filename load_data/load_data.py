@@ -19,7 +19,7 @@ sources.append(source_model(
     link = "https://www.czso.cz/documents/62353418/143522504/130142-21data043021.csv/760fab9c-d079-4d3a-afed-59cbb639e37d?version=1.1",
     columns = [
         column_model(1),
-        column_model(4),
+        column_model(4, utils.rename_gender),
         column_model(11, utils.all_before_bracket),
         column_model(12)
     ],

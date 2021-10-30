@@ -34,3 +34,9 @@ def all_before_bracket(text):
     if text.startswith("5-"):
         text = "0"+text
     return text
+
+def rename_gender(text):
+    if text == "1":
+        return "M"
+    elif text == "2":
+        return "Z"
