@@ -24,7 +24,8 @@ class csv_handler:
             with open(self.path_tmp, "w") as tmp_file:
                 reader = csv.reader(data_file)
                 writer = csv.writer(tmp_file)
-                writer.writerow([next(reader)[dc.index] for dc in desired_columns])
+                header = next(reader)
+                writer.writerow([header[dc.index] for dc in desired_columns])
                 for row in reader:
                     if row == []:
                         continue
@@ -48,7 +49,8 @@ class csv_handler:
             with open(self.path_tmp, "w") as tmp_file:
                 reader = csv.reader(data_file)
                 writer = csv.writer(tmp_file)
-                writer.writerow([next(reader)[dc.index] for dc in desired_columns])
+                header = next(reader)
+                writer.writerow([header[dc.index] for dc in desired_columns])
                 for row in reader:
                     if row == []:
                         continue
