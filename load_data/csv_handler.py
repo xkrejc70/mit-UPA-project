@@ -35,10 +35,8 @@ class csv_handler:
                     writer.writerow(new_row)
         self.tmp2origin()
 
+    # Filter 50 cities from 2020
     def filter_cities(self, desired_columns : List[column_model]):
-        output = io.StringIO()
-
-        # Filter 50 cities from 2020
         top_50_cities = []
         with open(os.path.join(utils.static_data_dir(), 'top_50_cities.csv'), 'r') as csvfile:
             csv_top_50_cities = csv.reader(csvfile)
@@ -55,6 +53,26 @@ class csv_handler:
                     if row == []:
                         continue
                     if "2020" not in row[9] or row[12] not in top_50_cities:
+                        continue 
+                    new_row = []
+                    for dc in desired_columns:
+                        new_row.append(dc.func(row[dc.index]))
+                    writer.writerow(new_row)
+        self.tmp2origin()
+
+    # Filter population of regions
+    def filter_regions(self, desired_columns : List[column_model]):
+        with open(self.path, "r") as data_file:
+            with open(self.path_tmp, "w") as tmp_file:
+                reader = csv.reader(data_file)
+                writer = csv.writer(tmp_file)
+                header = next(reader)
+                writer.writerow([header[dc.index] for dc in desired_columns])
+                for row in reader:
+                    if row == []:
+                        continue
+                    # filter only year 2020, regions (code 100) and both gender together (empty)
+                    if "2020" not in row[9] or row[7] != "100" or row[4] != "" or row[5] != "":
                         continue 
                     new_row = []
                     for dc in desired_columns:

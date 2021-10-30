@@ -15,7 +15,6 @@ sources.append(source_model(
     ],
     filename = "regions_daily"
 ))
-# TODO filter only year 2020
 sources.append(source_model(
     link = "https://www.czso.cz/documents/62353418/143522504/130142-21data043021.csv/760fab9c-d079-4d3a-afed-59cbb639e37d?version=1.1",
     columns = [
@@ -36,7 +35,6 @@ sources.append(source_model(
     ],
     filename = "new_cases"
 ))
-# TODO size: 2GB
 #"""
 sources.append(source_model(
     link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/ockovani-profese.csv",
@@ -50,7 +48,14 @@ sources.append(source_model(
     filename = "vaccinated"
 ))
 #"""
-
+sources.append(source_model(
+    link = "https://www.czso.cz/documents/62353418/143522504/130142-21data043021.csv/760fab9c-d079-4d3a-afed-59cbb639e37d?version=1.1",
+    columns = [
+        column_model(1),
+        column_model(12)
+    ],
+    filename = "regions_pop"
+))
 
 #DO NOT DELETE --- TEMPLATE
 """
@@ -73,5 +78,7 @@ for source in sources:
     csv_h = csv_handler(source.link, source.filename)
     if source.filename == "cities":
         data = csv_h.filter_cities(source.columns)
+    elif source.filename == "regions_pop":
+        data = csv_h.filter_regions(source.columns)
     else:
         data = csv_h.filter_columns(source.columns)

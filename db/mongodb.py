@@ -28,6 +28,14 @@ def insert_into_collection(collection, csv_file):
 
             collection.insert_one(doc)
 
+def add_pop(collection, regions):
+    with open(regions + '.csv', "r") as data_file:
+        reader = csv.reader(data_file)
+        for region in reader:
+            myquery = { "kraj_nazev": region[1] }
+            newvalues = { "$set": { "populace": region[0] } }
+            collection.update_one(myquery, newvalues)
+
 def print_all(collection):
     print(collection)
     for line in collection.find():

@@ -12,16 +12,10 @@ Matěj: Start working on data-obtaining.
     * 3. graf: Počty provedených očkování, ještě dále rozdělené dle věkové skupiny. Pro potřeby tohoto diagramu postačí 3 věkové skupiny (0-24 let, 25-59, nad 59).
     * Očkovaní (kraj, město, věk, pohlaví): https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/ockovani-profese.csv
 
-Alternativa:
-* Očkování (kraje a věk): https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/ockovani.csv
-* Očkování (pohlaví): https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/ockovani-demografie.csv
-
 ## Dotazy skupiny B
 
 * Vytvořte sérii sloupcových grafů (alespoň 3), které porovnají vývoj různých covidových ukozatelů vámi zvoleného kraj se zbytkem republiky. Jako covidové ukazatele můžete použít: počet nakažených osob, počet hospitalizovaných osob, počet zemřelých, počet očkovaných. Všechny hodnoty uvažujte přepočtené na jednoho obyvatele kraje/republiky. Zobrazte alespoň 12 po sobě jdoucích hodnot (např. hodnoty za poslední rok po měsících).
-  * 1. Nakažení: viz A
-  * 2. Úmrtí kumulativni: https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/kraj-okres-nakazeni-vyleceni-umrti.csv 
-  * 2. Úmrtí: https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/umrti.csv
+  * 1. Nakažení, vyléčení, úmrtí kumulativni: https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/kraj-okres-nakazeni-vyleceni-umrti.csv
   * 3. Očkovaní viz A
 
 ## Dotazy skupiny C
@@ -32,6 +26,5 @@ Alternativa:
   * Atributy: počet nakažených za poslední 4 čtvrtletí, počet očkovaných za poslední 4 čtvrtletí, počet obyvatel ve věkové skupině 0..14 let, počet obyvatel ve věkové skupině 15 - 59, počet obyvatel nad 59 let.
   * Pro potřeby projektu vyberte libovolně 50 měst, pro které najdete potřebné hodnoty (můžete např. využít nějaký žebříček 50 nejlidnatějších měst v ČR).
 
-  * Nakažení dle měst: https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/obce.csv
   * Očkovaní viz A
   * Obyvatelstvo podle pětiletých věkových skupin a pohlaví v krajích a okresech: https://www.czso.cz/documents/62353418/143522504/130142-21data043021.csv/760fab9c-d079-4d3a-afed-59cbb639e37d?version=1.1
