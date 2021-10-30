@@ -1,5 +1,6 @@
 from pymongo import MongoClient
-import os, csv
+import os, csv, json
+import pandas as pd
 
 db_name = "upa_covid_db"
 
@@ -16,17 +17,29 @@ def create_collection(db, collection):
     return db[collection]
 
 def insert_into_collection(collection, csv_file):
+    print(f"Inserting from", csv_file)
+    
+    data = pd.read_csv(csv_file + ".csv")
+    payload = json.loads(data.to_json(orient='records'))
+    collection.remove()
+    collection.insert(payload)
+
+"""
     with open(csv_file + '.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         header = next(reader)
+        mongo_docs = []
 
-        print(f"Inserting from", csv_file)
         for row in reader:
             doc = {}
             for n in range(0,len(header)):
                 doc[header[n]] = row[n]
 
-            collection.insert_one(doc)
+            mongo_docs += [doc]
+
+    collection.insert_many(mongo_docs)
+"""
+
 
 def add_pop(collection, regions):
     with open(regions + '.csv', "r") as data_file:

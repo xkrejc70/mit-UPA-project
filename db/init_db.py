@@ -23,11 +23,13 @@ coll_regions = mongodb.create_collection(db, "regions")
 coll_cities = mongodb.create_collection(db, "cities")
 
 # Insert to collections
+#"""
 mongodb.insert_into_collection(coll_new_cases, data_dir + "/new_cases")
 mongodb.insert_into_collection(coll_vaccinated, data_dir + "/vaccinated")
 mongodb.insert_into_collection(coll_regions_daily, data_dir + "/regions_daily")
 mongodb.insert_into_collection(coll_regions, static_data_dir + "/cz_regions")
 mongodb.insert_into_collection(coll_cities, data_dir + "/cities")
+#"""
 
 # TODO sjednotit krajr, pohlavi, vek (id instead of text)
 # new coll sex
@@ -50,6 +52,7 @@ mongodb.print_all(coll_regions_daily)
 mongodb.print_all(coll_regions)
 mongodb.print_all(coll_cities)
 """
+
 
 # Delete db and disconnect
 print(f"DBs: ", mongo_client.list_database_names())
