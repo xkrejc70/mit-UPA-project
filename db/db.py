@@ -29,6 +29,7 @@ class db:
         coll_regions_daily = mongodb.create_collection(self.db, "regions_daily")
         coll_regions = mongodb.create_collection(self.db, "regions")
         coll_cities = mongodb.create_collection(self.db, "cities")
+        coll_cities_new_cases = mongodb.create_collection(self.db, "cities_new_cases")
 
         if self.test_mode:
             # TODO Delete
@@ -46,6 +47,7 @@ class db:
             mongodb.insert_into_collection(coll_regions_daily, self.data_dir + "/regions_daily")
             mongodb.insert_into_collection(coll_regions, self.static_data_dir + "/cz_regions")
             mongodb.insert_into_collection(coll_cities, self.data_dir + "/cities")
+            mongodb.insert_into_collection(coll_cities_new_cases, self.data_dir + "/cities_new_cases")
 
         # Add population to each region
         mongodb.add_pop(coll_regions, self.data_dir + "/regions_pop")
@@ -56,6 +58,7 @@ class db:
         mongodb.print_few(coll_regions_daily)
         mongodb.print_few(coll_regions)
         mongodb.print_few(coll_cities)
+        mongodb.print_few(coll_cities_new_cases)
 
         print(f"DBs: ", self.mongo_client.list_database_names())
 

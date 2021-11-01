@@ -37,11 +37,7 @@ class csv_handler:
 
     # Filter 50 cities from 2020
     def filter_cities(self, desired_columns : List[column_model]):
-        top_50_cities = []
-        with open(os.path.join(utils.static_data_dir(), 'top_50_cities.csv'), 'r') as csvfile:
-            csv_top_50_cities = csv.reader(csvfile)
-            for city in csv_top_50_cities:
-                top_50_cities.append(city[0])
+        top_50_cities = self.get_50_cities()
 
         with open(self.path, "r") as data_file:
             with open(self.path_tmp, "w") as tmp_file:
@@ -79,6 +75,33 @@ class csv_handler:
                         new_row.append(dc.func(row[dc.index]))
                     writer.writerow(new_row)
         self.tmp2origin()
+
+    # Filter 50 cities
+    def filter_cities_new_cases(self, desired_columns : List[column_model]):
+        top_50_cities = self.get_50_cities()
+
+        with open(self.path, "r") as data_file:
+            with open(self.path_tmp, "w") as tmp_file:
+                reader = csv.reader(data_file)
+                writer = csv.writer(tmp_file)
+                header = next(reader)
+                writer.writerow([header[dc.index] for dc in desired_columns])
+                for row in reader:
+                    if row == []: continue
+                    if row[5] not in top_50_cities: continue
+                    new_row = []
+                    for dc in desired_columns:
+                        new_row.append(dc.func(row[dc.index]))
+                    writer.writerow(new_row)
+        self.tmp2origin()
+
+    def get_50_cities(self):
+        top_50_cities = []
+        with open(os.path.join(utils.static_data_dir(), 'top_50_cities.csv'), 'r') as csvfile:
+            csv_top_50_cities = csv.reader(csvfile)
+            for city in csv_top_50_cities:
+                top_50_cities.append(city[0])
+        return top_50_cities
 
     def tmp2origin(self):
         a = self.path + "a"
