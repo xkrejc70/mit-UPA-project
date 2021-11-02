@@ -1,7 +1,27 @@
+# load_data.py
+# Proj: UPA 2021
+# Authors: Matěj Sojka (xsojka04), Matěj Kudera (xkuder04), Honza Krejčí (xkrejc70)
+# Data selection for downloading
+
 import utils
 from csv_handler import csv_handler
 from input_models import column_model, source_model
 
+# List of needed CSV data files
+# Every file is defined by download url, needed columns (optinal is function for data transformation in specified clolumn) and save name 
+"""
+Imput data template
+
+sources.append(source_model(
+    link = "",
+    columns = [
+        column_model(),
+        column_model(),
+        column_model()
+    ],
+    filename = ""
+))
+"""
 
 sources = []
 sources.append(source_model(
@@ -66,27 +86,17 @@ sources.append(source_model(
     filename = "cities_new_cases"
 ))
 
-#DO NOT DELETE --- TEMPLATE
-"""
-sources.append(source_model(
-    link = "",
-    columns = [
-        column_model(),
-        column_model(),
-        column_model()
-    ],
-    filename = ""
-))
-"""
-
-#delete all outdated data
+# Delete all outdated data
 utils.delete_dir_content(utils.data_dir())
 
-#download new fresh data
+# Download new fresh data
 print("Loading data sets:")
 for source in sources:
+
     csv_h = csv_handler(source.link, source.filename)
     print("- " + source.filename)
+
+    # Apply specific filtration function
     if source.filename == "cities":
         data = csv_h.filter_cities(source.columns)
     elif source.filename == "regions_pop":
@@ -95,4 +105,7 @@ for source in sources:
         data = csv_h.filter_cities_new_cases(source.columns)
     else:
         data = csv_h.filter_columns(source.columns)
+
 print("Done")
+
+# END load_data.py

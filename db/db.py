@@ -1,9 +1,18 @@
+# db.py
+# Proj: UPA 2021
+# Authors: Honza Krejčí (xkrejc70), Matěj Sojka (xsojka04), Matěj Kudera (xkuder04)
+# Database creation and data insertion
+
 import mongodb, os, sys
+
+# Append project dir to sys.path
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
+
 from load_data import utils
 
+# Class for database creation and data insertion
 class db:
     def __init__(self, db_name = "upa_covid_db"):
         self.data_dir = utils.data_dir()
@@ -57,7 +66,10 @@ class db:
         mongodb.disconnect(self.mongo_client, self.name)
 
 
+# Create database and insert data
 database = db("upa_covid_db")
 database.init_db()
 database.insert_data()
 database.discconnect()
+
+# END db.py

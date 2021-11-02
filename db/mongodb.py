@@ -1,19 +1,28 @@
+# mongodb.py
+# Proj: UPA 2021
+# Authors: Honza Krejčí (xkrejc70), Matěj Sojka (xsojka04), Matěj Kudera (xkuder04)
+# Function for manipulation with MongoDB
+
 from pymongo import MongoClient
 import os, csv
 
+# Connect to local Mongo database server
 def connect(host = "localhost", port = 27017):
     os.system("sudo systemctl start mongod")
     #os.system("sudo systemctl status mongod")
 
     return MongoClient(host, port)
 
+# Create new database
 def create_db(mongo_client, db_name):
     print("Creating database " + db_name)
     return mongo_client[db_name]
 
+# Create new collection in database
 def create_collection(db, collection):
     return db[collection]
 
+# Insert data to databese in chuncks
 def insert_chunk(chuck, header, collection):
     mongo_docs = []
     for row in chuck:
@@ -62,8 +71,11 @@ def print_few(collection):
     for line in collection.find().limit(10):
         print(line)
 
+# Terminate colection with local MongoDB server
 def disconnect(mongo_client, db_name):
     mongo_client.drop_database(db_name)
     print(db_name + " - deleted")
     mongo_client.close()
     os.system("sudo systemctl stop mongod")
+
+# END mongodb.py
