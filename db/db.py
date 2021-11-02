@@ -28,6 +28,9 @@ class db:
         #print(mongo_client.server_info())
         #print(f"DBs: ", self.mongo_client.list_database_names())
 
+        # drop if exists
+        mongodb.delete_db(self.mongo_client, self.name)
+
         self.db = mongodb.create_db(self.mongo_client, self.name)
 
     def insert_data(self):

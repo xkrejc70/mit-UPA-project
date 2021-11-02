@@ -17,6 +17,10 @@ def create_db(mongo_client, db_name):
     print("Creating database " + db_name)
     return mongo_client[db_name]
 
+# Drop database if exists
+def delete_db(mongo_client, db_name):
+    mongo_client.drop_database(db_name)
+
 # Create new collection in database
 def create_collection(db, collection):
     return db[collection]
