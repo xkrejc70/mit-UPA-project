@@ -47,10 +47,12 @@ class db:
         mongodb.insert_into_collection(coll_cities, self.data_dir + "/cities")
         mongodb.insert_into_collection(coll_cities_new_cases, self.data_dir + "/cities_new_cases")
 
-
         # Add population to each region
         mongodb.add_pop(coll_regions, self.data_dir + "/regions_pop")
 
+        print("Done")
+
+        """
         print("In db:")
         mongodb.print_few(coll_new_cases)
         mongodb.print_few(coll_vaccinated)
@@ -58,10 +60,11 @@ class db:
         mongodb.print_few(coll_regions)
         mongodb.print_few(coll_cities)
         mongodb.print_few(coll_cities_new_cases)
+        """
 
         #print(f"DBs: ", self.mongo_client.list_database_names())
 
-    # Delete database and disconnect
+    # Disconnect
     def discconnect(self):
         mongodb.disconnect(self.mongo_client, self.name)
 

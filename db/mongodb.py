@@ -8,9 +8,8 @@ import os, csv
 
 # Connect to local Mongo database server
 def connect(host = "localhost", port = 27017):
-    os.system("sudo systemctl start mongod")
+    #os.system("sudo systemctl start mongod")
     #os.system("sudo systemctl status mongod")
-
     return MongoClient(host, port)
 
 # Create new database
@@ -73,9 +72,9 @@ def print_few(collection):
 
 # Terminate colection with local MongoDB server
 def disconnect(mongo_client, db_name):
-    mongo_client.drop_database(db_name)
-    print(db_name + " - deleted")
+    #mongo_client.drop_database(db_name)
+    #print(db_name + " - deleted")
     mongo_client.close()
-    os.system("sudo systemctl stop mongod")
+    #os.system("sudo systemctl stop mongod")
 
 # END mongodb.py
