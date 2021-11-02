@@ -14,6 +14,9 @@ def connect(host = "localhost", port = 27017):
 
 # Create new database
 def create_db(mongo_client, db_name):
+    # Drop db if exists
+    if db_name in mongo_client.list_database_names():
+        mongo_client.drop_database(db_name)
     print("Creating database " + db_name)
     return mongo_client[db_name]
 
