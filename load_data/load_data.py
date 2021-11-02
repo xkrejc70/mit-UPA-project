@@ -83,8 +83,10 @@ sources.append(source_model(
 utils.delete_dir_content(utils.data_dir())
 
 #download new fresh data
+print("Loading data sets:")
 for source in sources:
     csv_h = csv_handler(source.link, source.filename)
+    print("- " + source.filename)
     if source.filename == "cities":
         data = csv_h.filter_cities(source.columns)
     elif source.filename == "regions_pop":
@@ -93,3 +95,4 @@ for source in sources:
         data = csv_h.filter_cities_new_cases(source.columns)
     else:
         data = csv_h.filter_columns(source.columns)
+print("Done")

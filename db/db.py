@@ -17,7 +17,7 @@ class db:
         self.mongo_client = mongodb.connect()
 
         #print(mongo_client.server_info())
-        print(f"DBs: ", self.mongo_client.list_database_names())
+        #print(f"DBs: ", self.mongo_client.list_database_names())
 
         self.db = mongodb.create_db(self.mongo_client, self.name)
 
@@ -31,11 +31,13 @@ class db:
         coll_cities_new_cases = mongodb.create_collection(self.db, "cities_new_cases")
 
         # Insert loaded data to collections
-        mongodb.insert_into_collection(coll_new_cases, "../data_test/new_cases_for_test_only")
-        mongodb.insert_into_collection(coll_vaccinated, "../data_test/vaccinated_test")
-        mongodb.insert_into_collection(coll_regions_daily, "../data_test/regions_daily_test")
+        mongodb.insert_into_collection(coll_new_cases, self.data_dir + "/new_cases")
+        mongodb.insert_into_collection(coll_vaccinated, self.data_dir + "/vaccinated")
+        mongodb.insert_into_collection(coll_regions_daily, self.data_dir + "/regions_daily")
         mongodb.insert_into_collection(coll_regions, self.static_data_dir + "/cz_regions")
-        mongodb.insert_into_collection(coll_cities, "../data_test/cities_test")
+        mongodb.insert_into_collection(coll_cities, self.data_dir + "/cities")
+        mongodb.insert_into_collection(coll_cities_new_cases, self.data_dir + "/cities_new_cases")
+
 
         # Add population to each region
         mongodb.add_pop(coll_regions, self.data_dir + "/regions_pop")
@@ -48,7 +50,7 @@ class db:
         mongodb.print_few(coll_cities)
         mongodb.print_few(coll_cities_new_cases)
 
-        print(f"DBs: ", self.mongo_client.list_database_names())
+        #print(f"DBs: ", self.mongo_client.list_database_names())
 
     # Delete database and disconnect
     def discconnect(self):
