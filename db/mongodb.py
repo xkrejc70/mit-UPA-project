@@ -46,6 +46,7 @@ def insert_into_collection(collection, csv_file):
             chunk.append(line)
         insert_chunk(chunk, header, collection)
 
+# Add population into cities collection
 def add_pop(collection, regions):
     with open(regions + '.csv', "r") as data_file:
         reader = csv.reader(data_file)
@@ -54,6 +55,7 @@ def add_pop(collection, regions):
             newvalues = { "$set": { "populace": region[0] } }
             collection.update_one(myquery, newvalues)
 
+# Print 10 first objects of collection
 def print_few(collection):
     print(collection)
     for line in collection.find().limit(10):

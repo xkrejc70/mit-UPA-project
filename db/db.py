@@ -9,7 +9,6 @@ class db:
         self.data_dir = utils.data_dir()
         self.static_data_dir = utils.static_data_dir()
         self.name = db_name
-        self.test_mode = False
         self.mongo_client = None
         self.db = None
 
@@ -31,23 +30,12 @@ class db:
         coll_cities = mongodb.create_collection(self.db, "cities")
         coll_cities_new_cases = mongodb.create_collection(self.db, "cities_new_cases")
 
-        if self.test_mode:
-            # TODO Delete
-            # Insert loaded data to collections
-            mongodb.insert_into_collection(coll_new_cases, "../data_test/new_cases_for_test_only")
-            mongodb.insert_into_collection(coll_vaccinated, "../data_test/vaccinated_test")
-            mongodb.insert_into_collection(coll_regions_daily, "../data_test/regions_daily_test")
-            mongodb.insert_into_collection(coll_regions, self.static_data_dir + "/cz_regions")
-            mongodb.insert_into_collection(coll_cities, "../data_test/cities_test")
-
-        else:
-            # Reduced .csv data for testing
-            mongodb.insert_into_collection(coll_new_cases, self.data_dir + "/new_cases")
-            mongodb.insert_into_collection(coll_vaccinated, self.data_dir + "/vaccinated")
-            mongodb.insert_into_collection(coll_regions_daily, self.data_dir + "/regions_daily")
-            mongodb.insert_into_collection(coll_regions, self.static_data_dir + "/cz_regions")
-            mongodb.insert_into_collection(coll_cities, self.data_dir + "/cities")
-            mongodb.insert_into_collection(coll_cities_new_cases, self.data_dir + "/cities_new_cases")
+        # Insert loaded data to collections
+        mongodb.insert_into_collection(coll_new_cases, "../data_test/new_cases_for_test_only")
+        mongodb.insert_into_collection(coll_vaccinated, "../data_test/vaccinated_test")
+        mongodb.insert_into_collection(coll_regions_daily, "../data_test/regions_daily_test")
+        mongodb.insert_into_collection(coll_regions, self.static_data_dir + "/cz_regions")
+        mongodb.insert_into_collection(coll_cities, "../data_test/cities_test")
 
         # Add population to each region
         mongodb.add_pop(coll_regions, self.data_dir + "/regions_pop")
@@ -66,7 +54,7 @@ class db:
     def discconnect(self):
         mongodb.disconnect(self.mongo_client, self.name)
 
-# TODO instance in some "main script"
+
 database = db("upa_covid_db")
 database.init_db()
 database.insert_data()
