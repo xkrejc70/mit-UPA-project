@@ -17,6 +17,14 @@ def project_dir():
 def data_dir():
     return os.path.join(project_dir(), "data")
 
+# Path to save folder
+def extracted_data_dir():
+    return os.path.join(project_dir(), "extracted_data")
+    
+# Path to save folder
+def graphs_dir():
+    return os.path.join(project_dir(), "graphs")
+
 # Path to static data sert
 def static_data_dir():
     return os.path.join(project_dir(), "data_static")
