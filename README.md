@@ -1,5 +1,3 @@
-Matěj: Start working on data-obtaining.
-
 # Task
 
 ## Dotazy skupiny A

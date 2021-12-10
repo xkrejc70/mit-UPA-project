@@ -1,23 +1,33 @@
 import utils
+from db_manager import db_manager
+from os import path
+import csv  
 
-#TODO converts data to csv and stores them
+suffix_part1 = "part1"
+suffix_part2 = "part2"
+
+#uklada selekty so souboru
 def to_csv(data, path):
-    pass
+    with open(path, 'w', encoding='UTF8') as f:
+        keys = data[0].keys()
+        writer = csv.DictWriter(f, keys)
+        writer.writeheader()
+        writer.writerows(data)
 
-def select1(db):
-    data = db.select1()
-    to_csv(data, path):
+#EXAMPLE
+def select0(db):
+    #jmeno souboru
+    name = "select0"
+    #ziskani dat
+    part1, part2 = db.select0()
+    #ulozeni
+    to_csv(part1, utils.path_part1(name))
+    to_csv(part2, utils.path_part2(name))
 
+############################################
 #main body
 utils.delete_dir_content(utils.extracted_data_dir())
 
-#connect to db
-db = 0
-
-select1(db)
-#select2(db)
-#select3(db)
-#...
-
-#end db
-db.disconnect()
+#connect to db --- takhle neni treba volat disconnect... zavola se sam
+with db_manager() as db:
+    select0(db)
