@@ -17,3 +17,8 @@ class db_context:
         #dobs_part2
         part2 = self.db["cities"].find()
         return (part1, part2)
+
+    def selectA1(self):
+        #dobs_part2
+        part2 = self.db["cities"].find()
+        return (part2)

@@ -27,11 +27,11 @@ sources = []
 sources.append(source_model(
     link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/kraj-okres-nakazeni-vyleceni-umrti.csv",
     columns = [
-        column_model(0),
         column_model(1),
-        column_model(3),
+        column_model(2),
         column_model(4),
-        column_model(5)
+        column_model(5),
+        column_model(6)
     ],
     filename = "regions_daily"
 ))
@@ -48,23 +48,23 @@ sources.append(source_model(
 sources.append(source_model(
     link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/osoby.csv",
     columns = [
-        column_model(0),
         column_model(1),
         column_model(2),
-        column_model(3)
+        column_model(3),
+        column_model(4)
     ],
     filename = "new_cases"
 ))
 sources.append(source_model(
     link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/ockovani-profese.csv",
     columns = [
-        column_model(0),
         column_model(1),
         column_model(2),
-        column_model(6),
-        column_model(14),
+        column_model(3),
+        column_model(7),
         column_model(15),
-        column_model(18)
+        column_model(16),
+        column_model(19)
     ],
     filename = "vaccinated"
 ))
@@ -79,9 +79,9 @@ sources.append(source_model(
 sources.append(source_model(
     link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/obce.csv",
     columns = [
-        column_model(1),
-        column_model(7),
-        column_model(10)
+        column_model(2),
+        column_model(8),
+        column_model(11)
     ],
     filename = "cities_new_cases"
 ))

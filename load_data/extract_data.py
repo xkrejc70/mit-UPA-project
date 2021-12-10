@@ -24,6 +24,10 @@ def select0(db):
     to_csv(part1, utils.path_part1(name))
     to_csv(part2, utils.path_part2(name))
 
+# A1 - select age and region from new_cases
+def selectA1(db):
+    part1 = db.selectA1()
+
 ############################################
 #main body
 utils.delete_dir_content(utils.extracted_data_dir())
@@ -31,3 +35,4 @@ utils.delete_dir_content(utils.extracted_data_dir())
 #connect to db --- takhle neni treba volat disconnect... zavola se sam
 with db_manager() as db:
     select0(db)
+    selectA1(db)
