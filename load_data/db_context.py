@@ -19,14 +19,7 @@ class db_context:
         return (part1, part2)
 
     def selectA1(self):
-        # ToDelete
-        part1 = self.db["new_cases"].find({}, {
-                "_id": 0,
-                "vek": 1,
-                "kraj_nuts_kod": 1
-            }).limit(20)
-
-        part2 = self.db["new_cases"].aggregate([
+        data = self.db["new_cases"].aggregate([
             {
                 "$lookup": {
                     "from": "regions",
@@ -44,10 +37,19 @@ class db_context:
                     "vek": 1,
                     "kraj": "$kraj.kraj_nazev"
                 }
-            },
-            {
-                "$limit" : 20
             }
         ])
 
-        return (part1, list(part2))
+        return (list(data))
+
+    def selectA2(self):
+        data = self.db["vaccinated"].find({},
+            {
+                "_id": 0,
+                "pohlavi": 1,
+                "vekova_skupina": 1,
+                "kraj_nuts_kod": 1
+            }
+        )
+        
+        return (data)
