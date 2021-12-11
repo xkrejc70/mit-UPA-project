@@ -60,12 +60,4 @@ def rename_gender(text):
 def path_extracted_data(name):
     return os.path.join(extracted_data_dir(), f"{name}.csv")
 
-def path_part1(name):
-    suffix = "part1"
-    return os.path.join(extracted_data_dir(), f"{name}_{suffix}.csv")
-
-def path_part2(name):
-    suffix = "part2"
-    return os.path.join(extracted_data_dir(), f"{name}_{suffix}.csv")
-
 # END utils.py

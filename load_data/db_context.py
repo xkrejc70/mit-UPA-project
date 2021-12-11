@@ -56,13 +56,6 @@ class db_context:
     def disconnect(self):
         self.client.close()
 
-    def select0(self):
-        #dobs_part1
-        part1 = self.db["cities"].find()
-        #dobs_part2
-        part2 = self.db["cities"].find()
-        return (part1, part2)
-
     def selectA1(self):
         data = self.db["new_cases"].aggregate([
             {
@@ -84,7 +77,6 @@ class db_context:
                 }
             }
         ])
-
         return (list(data))
 
     def selectA2(self):
@@ -96,5 +88,97 @@ class db_context:
                 "kraj_nuts_kod": 1
             }
         )
-        
         return (data)
+
+    def selectB(self):
+        data = self.db["regions_daily"].find({},
+            {
+                "_id": 0,
+                "datum": 1,
+                "kraj_nuts_kod": 1,
+                "kumulativni_pocet_nakazenych": 1,
+                "kumulativni_pocet_vylecenych": 1,
+                "kumulativni_pocet_umrti": 1
+            }
+        )
+
+        data = self.db["regions_daily"].aggregate([
+            {
+                "$lookup": {
+                    "from": "regions",
+                    "localField": "kraj_nuts_kod",
+                    "foreignField": "kraj_nuts_kod",
+                    "as": "kraj"
+                }
+            },
+            {
+                "$unwind": "$kraj"
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "datum": 1,
+                    "kraj": "$kraj.kraj_nazev",
+                    "kumulativni_pocet_nakazenych": 1,
+                    "kumulativni_pocet_vylecenych": 1,
+                    "kumulativni_pocet_umrti": 1
+                }
+            },
+
+        ])
+        return (list(data))
+
+    def selectD1(self):
+        data = self.db["vaccinated"].aggregate([
+            {
+                "$match": {
+                    "poradi_davky": "1",
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "vakcina": "$vakcina",
+                    "vekova_skupina": "$vekova_skupina"
+                }
+            }
+        ])
+        return (list(data))
+
+    def selectD2(self):
+        data1 = self.db["vaccinated"].aggregate([
+            {
+                "$match": {
+                    "orp_bydliste": "Brno",
+                    "poradi_davky": "1",
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$datum",
+                    "count": {"$sum": 1}
+                }
+            }
+        ])
+
+        data2 = self.db["cities_new_cases"].aggregate([
+            {
+                "$match": {
+                    "orp_nazev": "Brno",
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "datum": "$datum",
+                    "count": {"$sum": {"$toInt": "$nove_pripady"}}
+                }
+            }
+        ])
+        return (list(data1), list(data2))
+
+"""
+            {
+                "$limit": 10
+            }
+"""
