@@ -26,7 +26,15 @@ def select0(db):
 
 # A1 - select age and region from new_cases
 def selectA1(db):
-    part1 = db.selectA1()
+    #jmeno souboru
+    name = "selectA1"
+    #ziskani dat
+    part1, part2 = db.selectA1()
+    #ulozeni
+    to_csv(part1, utils.path_part1(name))
+    to_csv(part2, utils.path_part2(name))
+
+    
 
 ############################################
 #main body
