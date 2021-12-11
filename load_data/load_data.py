@@ -76,6 +76,7 @@ sources.append(source_model(
     ],
     filename = "regions_pop"
 ))
+
 sources.append(source_model(
     link = "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/obce.csv",
     columns = [
@@ -90,11 +91,12 @@ sources.append(source_model(
 utils.delete_dir_content(utils.data_dir())
 
 # Download new fresh data
-print("Loading data sets:")
-for source in sources:
+print("Downloading data:")
 
+for source in sources:
+    print(f"Downloading start: {source.filename}")
     csv_h = csv_handler(source.link, source.filename)
-    print("- " + source.filename)
+    print(f"Downloading end: {source.filename}")
 
     # Apply specific filtration function
     if source.filename == "cities":
@@ -106,6 +108,8 @@ for source in sources:
     else:
         data = csv_h.filter_columns(source.columns)
 
-print("Done")
+    print(f"Filtering end: {source.filename}")
+
+print("Download done")
 
 # END load_data.py

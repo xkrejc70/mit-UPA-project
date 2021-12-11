@@ -105,7 +105,6 @@ class csv_handler:
     # Filter 50 cities
     def filter_cities_new_cases(self, desired_columns : List[column_model]):
         top_50_cities = self.get_50_cities()
-
         with open(self.path, "r") as data_file:
             with open(self.path_tmp, "w") as tmp_file:
                 reader = csv.reader(data_file)
@@ -114,7 +113,7 @@ class csv_handler:
                 writer.writerow([header[dc.index] for dc in desired_columns])
                 for row in reader:
                     if row == []: continue
-                    if row[5] not in top_50_cities: continue
+                    if row[10] not in top_50_cities: continue
                     new_row = []
                     for dc in desired_columns:
                         new_row.append(dc.func(row[dc.index]))

@@ -1,8 +1,10 @@
 all:
 	@echo haha;
 
-run:
-	cd load_data; python3 load_data.py; cd ../db; python3 db.py;
+run: load initdb
+	@echo "\n\n\n";
+	@echo "Data downloaded";
+	@echo "Data saved into database";
 
 load:
 	@cd load_data; python3 load_data.py;
@@ -14,4 +16,7 @@ visualize:
 	@cd load_data; python3 visualize_data.py;
 
 initdb:
-	@cd db; python3 db.py;
+	@cd load_data; python3 create_db.py;
+
+start_db_wsl:
+	@sudo service mongodb start;
