@@ -3,3 +3,7 @@ data/*
 !data/.gitkeep
 raw_data/*
 !raw_data/.gitkeep
+extracted_data/*
+!extracted_data/.gitkeep
+graphs/*
+!graphs/.gitkeep
