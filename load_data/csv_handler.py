@@ -113,7 +113,7 @@ class csv_handler:
                 writer.writerow([header[dc.index] for dc in desired_columns])
                 for row in reader:
                     if row == []: continue
-                    if row[10] not in top_50_cities: continue
+                    if row[6] not in top_50_cities: continue
                     new_row = []
                     for dc in desired_columns:
                         new_row.append(dc.func(row[dc.index]))

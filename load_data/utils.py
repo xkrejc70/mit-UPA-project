@@ -57,6 +57,9 @@ def rename_gender(text):
     elif text == "2":
         return "Z"
 
+def path_extracted_data(name):
+    return os.path.join(extracted_data_dir(), f"{name}.csv")
+
 def path_part1(name):
     suffix = "part1"
     return os.path.join(extracted_data_dir(), f"{name}_{suffix}.csv")
