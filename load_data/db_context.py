@@ -15,7 +15,7 @@ class db_context:
     def drop(self):
         self.client.drop_database(self.db_name)
 
-    def insert_chunk(self, chunk, header, collection_name):
+    def insert_chunk(self, chunk, header, collection):
         mongo_docs = []
         for row in chunk:
             doc = {}
@@ -23,10 +23,11 @@ class db_context:
                 doc[header[n]] = row[n]
             mongo_docs += [doc]
 
-        self.db[collection_name].insert_many(mongo_docs)
+        collection.insert_many(mongo_docs)
 
     def insert_csv(self, collection_name, csv_file):
         print(f"Insert csv start: {collection_name}")
+        collection = self.db[collection_name]
         with open(csv_file, 'r') as csvfile:
             reader = csv.reader(csvfile)
             header = next(reader)
@@ -35,20 +36,21 @@ class db_context:
 
             for i, line in enumerate(reader):
                 if (i % chunksize == 0 and i > 0):
-                    self.insert_chunk(chunk, header, collection_name)
+                    self.insert_chunk(chunk, header, collection)
                     del chunk[:]
                 chunk.append(line)
-            self.insert_chunk(chunk, header, collection_name)
+            self.insert_chunk(chunk, header, collection)
         print(f"Insert csv end: {collection_name}")
 
     def add_population_csv(self, csv_file):
         print(f"Insert population csv start")
         with open(csv_file, "r") as data_file:
             reader = csv.reader(data_file)
+            collection = self.db["regions"]
             for region in reader:
                 myquery = { "kraj_nazev": region[1] }
                 newvalues = { "$set": { "populace": region[0] } }
-                self.db["regions"].update_one(myquery, newvalues)
+                collection.update_one(myquery, newvalues)
         print(f"Insert population csv end")
 
     def disconnect(self):

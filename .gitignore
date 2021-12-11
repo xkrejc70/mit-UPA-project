@@ -7,3 +7,4 @@ extracted_data/*
 !extracted_data/.gitkeep
 graphs/*
 !graphs/.gitkeep
+test.sh
