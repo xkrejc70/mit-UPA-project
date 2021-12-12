@@ -1,5 +1,6 @@
 import utils
 import os
+from os import path
 
 def load_csv(path):
     pass
@@ -9,16 +10,20 @@ def store_graph(graph, name):
     #store
     pass
 
-def visualize1(name, path):
+def visualizeA1(name, path):
     data = load_csv(path)
     #pyplot logic
+    #savepyplot
     pass
 
 
 #main body
 utils.delete_dir_content(utils.graphs_dir())
-extracted_data_dir = utils.extracted_data_dir()
 
-def visualize1(name, path)
-#def visualize2(name, path)
-#def visualize3(name, path)
+####EXAMPLE - TODO delete
+save_path = path.join(utils.graphs_dir(), "shitA1.pdf")
+#################
+
+visualizeA1("", path.join(utils.extracted_data_dir(), "shitA1.csv"))
+#visualizeA2("", path.join(extracted_data_dir, "shitA2.csv"))
+#visualizeB1("", path.join(extracted_data_dir, "shitB1.csv"))
