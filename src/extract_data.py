@@ -64,4 +64,4 @@ with db_manager() as db:
     selectD1(db)
     selectD2(db)
 
-    print("Done")
+    print("Extraction Done")
