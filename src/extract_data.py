@@ -29,7 +29,8 @@ def selectA2(db):
 def selectB(db):
     name = "selectB"
     print("- " + name)
-    data = db.selectB()
+    regions, data = db.selectB()
+    to_csv(regions, utils.path_extracted_data(name + "_regions"))
     to_csv(data, utils.path_extracted_data(name))
 
 # C - TODO

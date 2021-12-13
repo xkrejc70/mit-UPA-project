@@ -91,14 +91,12 @@ class db_context:
         return (data)
 
     def selectB(self):
-        data = self.db["regions_daily"].find({},
+        regions = self.db["regions"].find({},
             {
                 "_id": 0,
-                "datum": 1,
                 "kraj_nuts_kod": 1,
-                "kumulativni_pocet_nakazenych": 1,
-                "kumulativni_pocet_vylecenych": 1,
-                "kumulativni_pocet_umrti": 1
+                "kraj_nazev": 1,
+                "populace": 1
             }
         )
 
@@ -126,7 +124,7 @@ class db_context:
             },
 
         ])
-        return (list(data))
+        return (regions, list(data))
 
     def selectD1(self):
         data = self.db["vaccinated"].aggregate([

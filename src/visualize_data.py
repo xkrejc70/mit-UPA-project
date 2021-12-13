@@ -118,10 +118,10 @@ def visualizeB(name, csv1_path, csv2_path):
     df_cummulative = df_cummulative.loc[(df_cummulative['datum'] >= '2020-11-30') & (df_cummulative['datum'] <= '2021-11-30')]
     
     # Get number of people in South-Moravian region
-    people_in_region = df_pop.loc[(df_pop['vuzemi_txt'] == 'Jihomoravský kraj')]['hodnota'].iloc[0]
+    people_in_region = df_pop.loc[(df_pop['kraj_nazev'] == 'Jihomoravský kraj')]['populace'].iloc[0]
 
     # Get number of people in all republic except South-Moravian region
-    rest_of_people = df_pop.loc[(df_pop['vuzemi_txt'] != 'Jihomoravský kraj')]['hodnota'].sum()
+    rest_of_people = df_pop.loc[(df_pop['kraj_nazev'] != 'Jihomoravský kraj')]['populace'].sum()
  
     df_cummulative = df_cummulative.groupby(['kraj', 'datum']).sum()
     df_cummulative = df_cummulative.reset_index()
@@ -211,6 +211,6 @@ def visualizeB(name, csv1_path, csv2_path):
 #main body
 utils.delete_dir_content(utils.graphs_dir())
 
-#visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
-#visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"))
-visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.data_dir(), "regions_pop.csv"))
+visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
+visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"))
+visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
