@@ -33,9 +33,14 @@ def selectB(db):
     to_csv(regions, utils.path_extracted_data(name + "_regions"))
     to_csv(data, utils.path_extracted_data(name))
 
-# C - TODO
+# C - select new cases, vaccinated and population of 50 cities
 def selectC(db):
-    None
+    name = "selectC"
+    print("- " + name)
+    cases, vax, pop = db.selectC()
+    to_csv(cases, utils.path_extracted_data(name + "_new_cases"))
+    to_csv(vax, utils.path_extracted_data(name + "_vaccinated"))
+    to_csv(pop, utils.path_extracted_data(name + "_population"))
 
 # D1 (custom1) - select age, vaccine type and number of doses from vaccinated
 def selectD1(db):

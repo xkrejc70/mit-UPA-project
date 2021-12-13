@@ -56,6 +56,7 @@ class db_context:
     def disconnect(self):
         self.client.close()
 
+# A1 - select age and region from new_cases
     def selectA1(self):
         data = self.db["new_cases"].aggregate([
             {
@@ -79,6 +80,7 @@ class db_context:
         ])
         return (list(data))
 
+# A2 - select gender, age and region from vaccinated
     def selectA2(self):
         data = self.db["vaccinated"].find({},
             {
@@ -90,6 +92,7 @@ class db_context:
         )
         return (data)
 
+# B - select date, region, number of (new cases, cured, deaths) from regions_daily
     def selectB(self):
         regions = self.db["regions"].find({},
             {
@@ -126,6 +129,44 @@ class db_context:
         ])
         return (regions, list(data))
 
+# C - select new cases, vaccinated and population 50 cities
+    def selectC(self):
+        new_cases = self.db["cities_new_cases"].find({},
+            {
+                "_id": 0,
+                "datum": 1,
+                "mesto": "$orp_nazev",
+                "nove_pripady": 1
+            }
+        )
+
+        vaccinated = self.db["vaccinated"].aggregate([
+            {
+                "$match": {
+                    "poradi_davky": "1",
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "datum": "$datum",
+                    "mesto": "$orp_bydliste"
+                }
+            }
+        ])
+
+        population = self.db["cities"].find({},
+            {
+                "_id": 0,
+                "populace": "$hodnota",
+                "vek_txt": 1,
+                "mesto": "$vuzemi_txt"
+            }
+        )
+
+        return (new_cases, list(vaccinated), population)
+
+# D1 (custom1) - select age, vaccine type and number of doses from vaccinated
     def selectD1(self):
         data = self.db["vaccinated"].aggregate([
             {
@@ -143,6 +184,7 @@ class db_context:
         ])
         return (list(data))
 
+# D2 (custom2) - select age, vaccine type and number of doses from vaccinated
     def selectD2(self):
         data1 = self.db["vaccinated"].aggregate([
             {
