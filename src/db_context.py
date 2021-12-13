@@ -155,16 +155,23 @@ class db_context:
             }
         ])
 
-        population = self.db["cities"].find({},
+        population = self.db["cities"].aggregate([
             {
-                "_id": 0,
-                "populace": "$hodnota",
-                "vek_txt": 1,
-                "mesto": "$vuzemi_txt"
+                "$match": {
+                    "pohlavi_kod": "",
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "populace": "$hodnota",
+                    "vek_txt": 1,
+                    "mesto": "$vuzemi_txt"
+                }
             }
-        )
+        ])
 
-        return (new_cases, list(vaccinated), population)
+        return (new_cases, list(vaccinated), list(population))
 
 # D1 (custom1) - select age, vaccine type and number of doses from vaccinated
     def selectD1(self):

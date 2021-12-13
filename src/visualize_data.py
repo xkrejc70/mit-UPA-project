@@ -1,6 +1,6 @@
 from textwrap import wrap
 import utils
-import os
+import os, csv
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -115,7 +115,9 @@ def visualizeB(name, csv1_path, csv2_path):
     df_pop = pd.read_csv(csv2_path)
 
     # Keep data from last 12 months
-    df_cummulative = df_cummulative.loc[(df_cummulative['datum'] >= '2020-11-30') & (df_cummulative['datum'] <= '2021-11-30')]
+    date_to = utils.get_current_date()
+    date_from = utils.get_date_year_ago()
+    df_cummulative = df_cummulative.loc[(df_cummulative['datum'] >= date_from) & (df_cummulative['datum'] <= date_to)]
     
     # Get number of people in South-Moravian region
     people_in_region = df_pop.loc[(df_pop['kraj_nazev'] == 'Jihomoravský kraj')]['populace'].iloc[0]
@@ -206,6 +208,65 @@ def visualizeB(name, csv1_path, csv2_path):
 
     #TODO Graph 4: Vaccinated persons for South-Moravian region
 
+# C - 
+def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
+    print("- " + name)
+    df_cases = pd.read_csv(csv1_path)
+    df_vax = pd.read_csv(csv2_path)
+    df_pop = pd.read_csv(csv3_path)
+
+    # Keep data from last 12 months
+    date_to = utils.get_current_date()
+    date_from = utils.get_date_year_ago()
+    df_cases = df_cases.loc[(df_cases['datum'] >= date_from) & (df_cases['datum'] <= date_to)]
+    df_vax = df_vax.loc[(df_vax['datum'] >= date_from) & (df_vax['datum'] <= date_to)]
+
+    # Get 50 cities
+    cities = []
+    with open(csv4_path) as file_name:
+        file_read = csv.reader(file_name, delimiter=',')
+        for city in file_read:
+            cities.append(''.join(city))
+
+    # Total number of new cases in 50 cities
+    df_cases = df_cases.loc[df_cases['mesto'].isin(cities)]
+    df_cases = df_cases.groupby(['mesto']).sum()
+    df_cases.columns = ['pocet_nakazenych']
+
+    # Total number of vaccinated in 50 cities
+    df_vax = df_vax.loc[df_vax['mesto'].isin(cities)]
+    df_vax = df_vax.groupby(['mesto']).count()
+    df_vax.columns = ['pocet_ockovanych']
+
+    df_pop = df_pop.replace(to_replace ="Hlavní město Praha", value ="Praha")
+    df_pop = df_pop.replace(to_replace ="Plzeň-město", value ="Plzeň")
+    df_pop = df_pop.replace(to_replace ="Ostrava-město", value ="Ostrava")
+    df_pop = df_pop.replace(to_replace ="Brno-město", value ="Brno")
+
+    # Merge population into 3 groups of each city
+    group_1 = ['0-5', '05-10', '10-15']
+    df_pop_1 = df_pop.loc[df_pop['vek_txt'].isin(group_1)]
+    df_pop_1 = df_pop_1.groupby(['mesto']).sum()
+    df_pop_1.columns = ['populace_0-14']
+    
+    group_2 = ['15-20', '20-25', '25-30', '30-35', '35-40', '40-45', '45-50', '50-55', '55-60']
+    df_pop_2 = df_pop.loc[df_pop['vek_txt'].isin(group_2)]
+    df_pop_2 = df_pop_2.groupby(['mesto']).sum()
+    df_pop_2.columns = ['populace_15-59']
+
+    group_3 = ['60-65', '65-70', '70-75', '75-80', '80-85', '85-90', '90-95', '95+']
+    df_pop_3 = df_pop.loc[df_pop['vek_txt'].isin(group_3)]
+    df_pop_3 = df_pop_3.groupby(['mesto']).sum()
+    df_pop_3.columns = ['populace_60+']
+
+    # Save as csv file
+    df = pd.merge(df_cases, df_vax, on = 'mesto')
+    df = pd.merge(df, df_pop_1, on = 'mesto')
+    df = pd.merge(df, df_pop_2, on = 'mesto')
+    df = pd.merge(df, df_pop_3, on = 'mesto')
+    df.to_csv(os.path.join(utils.extracted_data_dir(), "selectC_prepared_for_DM.csv"), encoding='utf-8')
+
+
 ########################################################
 #sns.set(rc = {'figure.figsize':(8,5)})
 #main body
@@ -214,3 +275,6 @@ utils.delete_dir_content(utils.graphs_dir())
 visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
 visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"))
 visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
+prepareC("prepareC", path.join(utils.extracted_data_dir(), "selectC_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectC_vaccinated.csv"), path.join(utils.extracted_data_dir(), "selectC_population.csv"), path.join(utils.static_data_dir(), "top_50_cities.csv"))
+
+print("Done")

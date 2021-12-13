@@ -4,6 +4,8 @@
 # Path and data manipulation utils
 
 import os
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 # Current program path
 def curr_dir():
@@ -59,5 +61,11 @@ def rename_gender(text):
 
 def path_extracted_data(name):
     return os.path.join(extracted_data_dir(), f"{name}.csv")
+
+def get_current_date():
+    return datetime.today().strftime("%Y-%m-%d")
+
+def get_date_year_ago():
+    return (datetime.now() - relativedelta(years = 1)).strftime("%Y-%m-%d")
 
 # END utils.py
