@@ -350,6 +350,11 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
     df_pop_3 = df_pop_3.groupby(['mesto']).sum()
     df_pop_3.columns = ['populace_60+']
 
+    # TODO normalizace
+    
+    
+    # TODO normalizace
+
     # Save as csv file
     df = pd.merge(df_cases, df_vax, on = 'mesto')
     df = pd.merge(df, df_pop_1, on = 'mesto')
