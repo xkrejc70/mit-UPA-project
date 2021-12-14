@@ -350,13 +350,29 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
     df_pop_3 = df_pop_3.groupby(['mesto']).sum()
     df_pop_3.columns = ['populace_60+']
 
-    # TODO normalizace
-    
-    
-    # TODO normalizace
+    # Normalization (min-max)
+    normalized_cases = (df_cases - df_cases.min()) / (df_cases.max() - df_cases.min())
+    normalized_cases.columns = ['normalizovany_pocet_nakazenych']
+
+    # Discretization
+    n_intervals = 10
+    vax = df_vax["pocet_ockovanych"]
+    interval_range = (vax.max() - vax.min()) / n_intervals + 1
+    interval_from = vax.min() - interval_range
+    interval_to = vax.min()
+    df_vax_disc = pd.DataFrame()
+    for i in range(n_intervals):
+        interval_from += interval_range
+        interval_to += interval_range
+        for city, row in df_vax.iterrows():
+            if (int(row['pocet_ockovanych']) > interval_from) and (int(row['pocet_ockovanych']) < interval_to):
+                df_vax_disc = df_vax_disc.append({'mesto': city, 'interval_poctu_ockovanych': str(round(interval_from, 1)) + "-" + str(round(interval_to, 1))}, ignore_index=True)
+
 
     # Save as csv file
-    df = pd.merge(df_cases, df_vax, on = 'mesto')
+    df = pd.merge(df_cases, normalized_cases, on = 'mesto')
+    df = pd.merge(df, df_vax, on = 'mesto')
+    df = pd.merge(df, df_vax_disc, on = 'mesto')
     df = pd.merge(df, df_pop_1, on = 'mesto')
     df = pd.merge(df, df_pop_2, on = 'mesto')
     df = pd.merge(df, df_pop_3, on = 'mesto')
@@ -367,11 +383,11 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
 #main body
 utils.delete_dir_content(utils.graphs_dir())
 
-visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
-visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
-visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
-visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
-visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
+#visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
+#visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
+#visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
+#visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
+#visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
 prepareC("prepareC", path.join(utils.extracted_data_dir(), "selectC_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectC_vaccinated.csv"), path.join(utils.extracted_data_dir(), "selectC_population.csv"), path.join(utils.static_data_dir(), "top_50_cities.csv"))
 
 print("Visualization Done")

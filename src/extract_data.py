@@ -3,7 +3,7 @@ from db_manager import db_manager
 from os import path
 import csv
 
-#uklada selekty so souboru
+# Save data to csv
 def to_csv(data, path):
     with open(path, 'w', encoding='UTF8') as f:
         keys = data[0].keys()
@@ -58,10 +58,10 @@ def selectD2(db):
     to_csv(data2, utils.path_extracted_data(name + "_new_cases"))
 
 ############################################
-#main body
+
 utils.delete_dir_content(utils.extracted_data_dir())
 
-#connect to db --- takhle neni treba volat disconnect... zavola se sam
+# Connect to db
 with db_manager() as db:
     selectA1(db)
     selectA2(db)

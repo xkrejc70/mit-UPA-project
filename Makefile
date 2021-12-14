@@ -1,10 +1,12 @@
 all:
 	@echo haha;
 
-run: load initdb
+run: load initdb extract visualize
 	@echo "\n\n\n";
 	@echo "Data downloaded";
 	@echo "Data saved into database";
+	@echo "Data extracted";
+	@echo "Data visualized";
 
 load:
 	@cd src; python3 load_data.py;
