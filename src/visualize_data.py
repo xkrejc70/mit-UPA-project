@@ -350,6 +350,27 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
     df_pop_3 = df_pop_3.groupby(['mesto']).sum()
     df_pop_3.columns = ['populace_60+']
 
+    ###### Detect and replace outliers
+    q1 = df_cases['pocet_nakazenych'].quantile(q=0.25, interpolation='linear')
+    q3 = df_cases['pocet_nakazenych'].quantile(q=0.75, interpolation='linear')
+    iqr = q3- q1
+
+    lower_range = q1 - (1.5 * iqr)
+    upper_range = q3 + (1.5 * iqr)
+    
+    # Replace outliers by min and max value
+    edited_outliers = list()
+    for index, row in df_cases.iterrows():
+        if row['pocet_nakazenych'] > upper_range:
+            edited_outliers.append([index, round(upper_range)])
+        elif row['pocet_nakazenych'] < lower_range:
+            edited_outliers.append([index, round(lower_range)])
+        else:
+            edited_outliers.append([index, row['pocet_nakazenych']])
+
+    df_cases_outliers = pd.DataFrame(edited_outliers, columns=['mesto', 'pocet_nakazenych'])
+    df_cases_outliers = df_cases_outliers.rename(columns={"mesto": "mesto", "pocet_nakazenych": "pocet_nakazenych_upravene_odlehle_hodnoty"})
+    
     # Normalization (min-max)
     normalized_cases = (df_cases - df_cases.min()) / (df_cases.max() - df_cases.min())
     normalized_cases.columns = ['normalizovany_pocet_nakazenych']
@@ -371,6 +392,7 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
 
     # Save as csv file
     df = pd.merge(df_cases, normalized_cases, on = 'mesto')
+    df = pd.merge(df, df_cases_outliers, on = 'mesto')
     df = pd.merge(df, df_vax, on = 'mesto')
     df = pd.merge(df, df_vax_disc, on = 'mesto')
     df = pd.merge(df, df_pop_1, on = 'mesto')
@@ -383,11 +405,11 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
 #main body
 utils.delete_dir_content(utils.graphs_dir())
 
-#visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
-#visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
-#visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
-#visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
-#visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
+visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
+visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
+visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
+visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
+visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
 prepareC("prepareC", path.join(utils.extracted_data_dir(), "selectC_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectC_vaccinated.csv"), path.join(utils.extracted_data_dir(), "selectC_population.csv"), path.join(utils.static_data_dir(), "top_50_cities.csv"))
 
 print("Visualization Done")
