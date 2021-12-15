@@ -29,7 +29,7 @@ class csv_handler:
     # Get file of 50 cities from static data folder
     def get_50_cities(self):
         top_50_cities = []
-        with open(os.path.join(utils.static_data_dir(), 'top_50_cities.csv'), 'r') as csvfile:
+        with open(os.path.join(utils.static_data_dir(), '50_cities.csv'), 'r') as csvfile:
             csv_top_50_cities = csv.reader(csvfile)
             for city in csv_top_50_cities:
                 top_50_cities.append(city[0])

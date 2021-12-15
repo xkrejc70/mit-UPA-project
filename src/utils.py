@@ -22,6 +22,10 @@ def data_dir():
 # Path to save folder
 def extracted_data_dir():
     return os.path.join(project_dir(), "extracted_data")
+
+# Path to save folder
+def mining_data_dir():
+    return os.path.join(project_dir(), "data_mining")
     
 # Path to save folder
 def graphs_dir():

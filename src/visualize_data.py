@@ -201,8 +201,6 @@ def visualizeB(name, csv1_path, csv2_path):
     fig.tight_layout()
     fig.savefig(path.join(utils.graphs_dir(), name+"_3.png"))
 
-    #TODO Graph 4: Vaccinated persons for South-Moravian region
-
 # D1 - Show number of vaccinations with each vaccine for all age groups 
 def visualizeD1(name, csv_path):
     print("- " + name)
@@ -329,7 +327,6 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
     df_vax = df_vax.groupby(['mesto']).count()
     df_vax.columns = ['pocet_ockovanych']
 
-    df_pop = df_pop.replace(to_replace ="Hlavní město Praha", value ="Praha")
     df_pop = df_pop.replace(to_replace ="Plzeň-město", value ="Plzeň")
     df_pop = df_pop.replace(to_replace ="Ostrava-město", value ="Ostrava")
     df_pop = df_pop.replace(to_replace ="Brno-město", value ="Brno")
@@ -350,7 +347,16 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
     df_pop_3 = df_pop_3.groupby(['mesto']).sum()
     df_pop_3.columns = ['populace_60+']
 
-    ###### Detect and replace outliers
+    # Save as csv file
+    df = pd.merge(df_cases, df_vax, on = 'mesto')
+    df = pd.merge(df, df_pop_1, on = 'mesto')
+    df = pd.merge(df, df_pop_2, on = 'mesto')
+    df = pd.merge(df, df_pop_3, on = 'mesto')
+    df.to_csv(os.path.join(utils.mining_data_dir(), name+"_unedited.csv"), encoding='utf-8')
+
+    ########################## Data manipulation ######################
+
+    ## Detect and replace outliers
     q1 = df_cases['pocet_nakazenych'].quantile(q=0.25, interpolation='linear')
     q3 = df_cases['pocet_nakazenych'].quantile(q=0.75, interpolation='linear')
     iqr = q3- q1
@@ -389,8 +395,7 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
             if (int(row['pocet_ockovanych']) > interval_from) and (int(row['pocet_ockovanych']) < interval_to):
                 df_vax_disc = df_vax_disc.append({'mesto': city, 'interval_poctu_ockovanych': str(round(interval_from, 1)) + "-" + str(round(interval_to, 1))}, ignore_index=True)
 
-
-    # Save as csv file
+    # Save edited csv file
     df = pd.merge(df_cases, normalized_cases, on = 'mesto')
     df = pd.merge(df, df_cases_outliers, on = 'mesto')
     df = pd.merge(df, df_vax, on = 'mesto')
@@ -398,18 +403,19 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
     df = pd.merge(df, df_pop_1, on = 'mesto')
     df = pd.merge(df, df_pop_2, on = 'mesto')
     df = pd.merge(df, df_pop_3, on = 'mesto')
-    df.to_csv(os.path.join(utils.extracted_data_dir(), "selectC_prepared_for_DM.csv"), encoding='utf-8')
+    df = df.set_index('mesto')
+    df.to_csv(os.path.join(utils.mining_data_dir(), name+"_edited.csv"), encoding='utf-8')
 
 
 ########################################################
 #main body
 utils.delete_dir_content(utils.graphs_dir())
 
-visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
-visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
-visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
-visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
-visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
-prepareC("prepareC", path.join(utils.extracted_data_dir(), "selectC_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectC_vaccinated.csv"), path.join(utils.extracted_data_dir(), "selectC_population.csv"), path.join(utils.static_data_dir(), "top_50_cities.csv"))
+#visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
+#visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
+#visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
+#visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
+#visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
+prepareC("prepareC", path.join(utils.extracted_data_dir(), "selectC_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectC_vaccinated.csv"), path.join(utils.extracted_data_dir(), "selectC_population.csv"), path.join(utils.static_data_dir(), "50_cities.csv"))
 
 print("Visualization Done")
