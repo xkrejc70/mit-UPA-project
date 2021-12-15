@@ -2,8 +2,8 @@
 data/*
 !data/.gitkeep
 raw_data/*
-!data_mining/.gitkeep
 data_mining/*
+!data_mining/.gitkeep
 !raw_data/.gitkeep
 extracted_data/*
 !extracted_data/.gitkeep

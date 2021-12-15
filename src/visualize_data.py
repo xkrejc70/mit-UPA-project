@@ -410,12 +410,13 @@ def prepareC(name, csv1_path, csv2_path, csv3_path, csv4_path):
 ########################################################
 #main body
 utils.delete_dir_content(utils.graphs_dir())
+utils.delete_dir_content(utils.mining_data_dir())
 
-#visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
-#visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
-#visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
-#visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
-#visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
+visualizeA1("visualizeA1", path.join(utils.extracted_data_dir(), "selectA1.csv"))
+visualizeA2("visualizeA2", path.join(utils.extracted_data_dir(), "selectA2.csv"), path.join(utils.static_data_dir(), "cz_regions.csv"))
+visualizeB("visualizeB", path.join(utils.extracted_data_dir(), "selectB.csv"), path.join(utils.extracted_data_dir(), "selectB_regions.csv"))
+visualizeD1("visualizeD1", path.join(utils.extracted_data_dir(), "selectD1.csv"))
+visualizeD2("visualizeD2", path.join(utils.extracted_data_dir(), "selectD2_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectD2_vaccinated.csv"))
 prepareC("prepareC", path.join(utils.extracted_data_dir(), "selectC_new_cases.csv"), path.join(utils.extracted_data_dir(), "selectC_vaccinated.csv"), path.join(utils.extracted_data_dir(), "selectC_population.csv"), path.join(utils.static_data_dir(), "50_cities.csv"))
 
 print("Visualization Done")
