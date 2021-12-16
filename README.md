@@ -1,3 +1,8 @@
+# mit-UPA-project
+
+
+UPA - Data Storage and Preparation - Project, the 1st Part: Data Processing and Storage Design, Project, the 2nd Part: Extraction, Storage, and Data Processing System Implementation
+
 # Task
 
 ## Dotazy skupiny A
