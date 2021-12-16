@@ -5,6 +5,32 @@ UPA - Data Storage and Preparation - Project, the 1st Part: Data Processing and 
 
 # Task
 
+== Zadání 1. části ==
+
+Seznamte se s nabízenými tématy pro řešení projektů, které popisují zdroje dat (odkazy na datové sady) a dotazy, které je potřeba na základě těchto dat zodpovědět.
+
+Zvolte si jeden z nabízených zdrojů dat (téma projektu) a analyzujte dílčí datové sady z daného zdroje, jejich strukturu (schéma), typy datových položek, identifikátory, možnosti propojení datových sad (společné entity) či napojení na externí data (jiné zdroje, entity reálného světa, např. polohu v geografickém prostoru), změnu dat v čase (temporální data), a jiné. Po dohodě se cvičícími je zde v některých případech možné zvolit vlastní zdroj dat.
+
+Navrhněte vhodný způsob načtení datových sad z daného zdroje a jejich uložení ve zvolené NoSQL databázi (s výběrem vhodné NoSQL databáze Vám pomohou cvičení z předmětu; jedná se často pro nestrukturovaná či velká data).
+
+Implementujte systém pro získávání, předzpracování, uložení dat do/ve zvolené NoSQL databázi
+
+Výsledné řešení 1. části odevzdejte do WISu. Očekává se, že odevzdáte nejen dokumentaci z analýzy datových sad a z návrhu řešení pro načtení a uložení v NoSQL, ale také zdrojové kódy řešení (skripty, aplikace, schémata, atp.) a stručnou dokumentaci jeho zprovoznění, případně také příklady zajímavých problémů, se kterými jste se v průběhu řešení setkali. Dokumentaci (mimo zdrojové kódy) odevzdávejte ve formátu PDF či jako prostý text v kódování ASCII/UTF-8.
+
+== Zadání 2.části ==
+
+Zvolte si dva úkoly/dotazy ze skupiny A a jeden úkol/dotaz ze skupiny B k řešenému tématu. 
+
+Vymyslete dva vlastní nové úkoly/dotazy, neuvedené u tématu. Jeden z úkolů/dotazů musí vyžadovat kombinaci dat alespoň ze dvou zdrojů. 
+
+Pro všechny zvolené dotazy implementujte nástroj pro extrakci potřebných dat z původního úložiště vytvořeného v první části projektu do souboru/souborů v CSV formátu.
+
+Pro všechny zvolené dotazy navrhněte a implementujte řešení, které tyto dotazy zodpoví. Toto řešení bude již pracovat s daty ve formátu CSV. 
+
+Všechny zvolené dotazy a získané výsledky prezentujte v jednoduché dokumentaci nebo prezentaci.
+
+Zvolte si jednu z dolovacích úloh ze skupiny C. Pro tuto úlohu připravte data tak, aby výsledná data mohla být použita dolovacím algoritmem. Tzn. připravte soubor ve formátu CSV, kde každý řádek bude odpovídat jednomu objektu, každý sloupec nějakému atributu. Dále pak ve vybraných datech detekujte odlehlé hodnoty a nahraďte je jinou vhodnou hodnotou, pro jeden zvolený sloupec proveďte normalizaci hodnot a pro jiný sloupec diskretizaci hodnot. Opět implementujte nástroj, který potřebná data extrahuje z úložiště vytvořeného v první části projektu a dále je požadovaným způsobem upraví. Samotné dolování z dat není vyžadováno.
+
 ## Dotazy skupiny A
 * Vytvořte krabicové grafy zobrazující rozložení věku nakažených osob v jednotlivých krajích.
    * Přehled osob s prokázanou nákazou dle krajů: https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/osoby.csv
